@@ -1,13 +1,22 @@
 class Node:
-    def __init__(self, value, next=None):
+    def __init__(self, value=None, next_node=None):
         self.value = value
-        self.next = next  # The next node in the list
+        self.next_node = next_node
+
+    def get_value(self):
+        return self.value
+
+    def get_next(self):
+        return self.next_node
+
+    def set_next(self, new_next):
+        self.next_node = new_next
 
 
 class LinkedList:
     def __init__(self):
-        self.head: Node = None  # points to the first node in the list
-        self.tail: Node = None  # Points to the last node in the list
+        self.head: Node = None
+        self.tail: Node = None
         self.length = 0
 
     def __str__(self):
@@ -45,22 +54,39 @@ class LinkedList:
             self.length = self.length - 1
             return current_head.value
 
-    def remove_tail(self):
-        if not self.tail:
-            return None
+    # def remove_tail(self):
+    #     if not self.tail:
+    #         return None
+    #     if self.tail == self.head:
+    #         current_tail = self.tail
+    #         self.tail = None
+    #         self.head = None
+    #         self.length -= 1
+    #         return current_tail.value
+    #     else:
+    #         current_node = self.head
+    #         while current_node.next != self.tail:
+    #             current_node.next
+    #         old_tail = current_node.next.value
+    #         current_node.next = None
+    #         self.tail = current_node
+    #         self.length -= 1
+    #         return old_tail
 
-        if self.tail == self.head:
-            current_tail = self.tail
-            self.tail = None
+    def remove_tail(self):
+        if not self.head:
+            return None
+        if self.head == self.tail:
+            current_tail = self.head.get_value()
             self.head = None
+            self.tail = None
             self.length -= 1
             return current_tail.value
         else:
             current_node = self.head
-            while current_node.next != self.tail:
-                current_node.next
-            old_tail = current_node.next.value
-            current_node.next = None
+            while current_node.get_next() != self.tail:
+                current_node = current_node.get_next()
+            new_current_tail = self.tail.get_value()
             self.tail = current_node
-            self.length -= 1
-            return old_tail
+            self.tail.set_next(None)
+            return new_current_tail
