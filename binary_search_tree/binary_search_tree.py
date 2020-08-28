@@ -9,6 +9,11 @@ This part of the project comprises two days:
 2. Implement the `in_order_print`, `bft_print`, and `dft_print` methods
    on the BSTNode class.
 """
+# import sys
+# sys.path.append('../queue')
+from queue import Queue
+
+from stack.stack import Stack
 
 
 class BSTNode:
@@ -35,9 +40,11 @@ class BSTNode:
     def contains(self, target):
         if target == self.value:
             return True
-        elif target >= self.value:
+        elif target > self.value:
             if self.right is None:
                 return False
+            else:
+                return self.right.contains(target)
         elif target < self.value:
             if self.left is None:
                 return False
@@ -46,7 +53,9 @@ class BSTNode:
 
     # Return the maximum value found in the tree
     def get_max(self):
-        while self.right is not None:
+        if self.right is None:
+            return self.value
+        else:
             return self.right.get_max()
 
     # Call the function `fn` on the value of each node
@@ -62,17 +71,39 @@ class BSTNode:
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
     def in_order_print(self):
-        pass
+        if self.left:
+            self.left.in_order_print()
+        print(self.value)
+        if self.right:
+            self.right.in_order_print()
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self):
-        pass
+        queue = Queue()
+        node = self
+        queue.enqueue(node)
+        while len(queue) > 0:
+            node = queue.dequeue()
+            if node.left:
+                queue.enqueue(node.left)
+            if node.right:
+                queue.enqueue(node.right)
+            print(node.value)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self):
-        pass
+        stack = Stack()
+        node = self
+        stack.push(node)
+        while len(stack) > 0:
+            node = stack.pop()
+            if node.left:
+                stack.push(node.left)
+            if node.right:
+                stack.push(node.right)
+            print(node.value)
 
     # Stretch Goals -------------------------
     # Note: Research may be required
@@ -90,18 +121,18 @@ class BSTNode:
 This code is necessary for testing the `print` methods
 """
 bst = BSTNode(1)
-#
-# bst.insert(8)
-# bst.insert(5)
-# bst.insert(7)
-# bst.insert(6)
-# bst.insert(3)
-# bst.insert(4)
-# bst.insert(2)
-#
-# bst.bft_print()
-# bst.dft_print()
-#
+
+bst.insert(8)
+bst.insert(5)
+bst.insert(7)
+bst.insert(6)
+bst.insert(3)
+bst.insert(4)
+bst.insert(2)
+
+bst.bft_print()
+bst.dft_print()
+
 # print("elegant methods")
 # print("pre order")
 # bst.pre_order_dft()
